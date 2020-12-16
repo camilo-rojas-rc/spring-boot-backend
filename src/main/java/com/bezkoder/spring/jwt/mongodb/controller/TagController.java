@@ -22,6 +22,7 @@ import com.bezkoder.spring.jwt.mongodb.model.Tag;
 import com.bezkoder.spring.jwt.mongodb.model.TagPre;
 import com.bezkoder.spring.jwt.mongodb.repository.TagRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.TagPreRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.TagQuizRepository;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -33,6 +34,9 @@ public class TagController {
 
   @Autowired
   TagPreRepository tagpreRepository;
+
+  @Autowired
+  TagQuizRepository tagquizRepository;
 
   @GetMapping("/tags/all")
   public ResponseEntity<List<Tag>> getAllTags(@RequestParam(required = false) String nombre) {
@@ -90,17 +94,11 @@ public class TagController {
   }
   
   @DeleteMapping("/tags/{id}")
-  public ResponseEntity<TagPre> deleteTag(@PathVariable("id") String id) {
+  public ResponseEntity<HttpStatus> deleteTag(@PathVariable("id") String id) {
     try {
-      Optional<TagPre> tagpreData = tagpreRepository.findByTagid(id);
-      if (tagpreData.isPresent()) {
-        TagPre _tagpre  = tagpreData.get();
-        String tagid = _tagpre.getId();
-        tagpreRepository.deleteById(tagid);
-        tagRepository.deleteById(id);
-      } else {
-        tagRepository.deleteById(id);
-      }
+      tagpreRepository.deleteByTagid(id);
+      tagquizRepository.deleteByTagid(id);
+      tagRepository.deleteById(id);
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     } catch (Exception e) {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

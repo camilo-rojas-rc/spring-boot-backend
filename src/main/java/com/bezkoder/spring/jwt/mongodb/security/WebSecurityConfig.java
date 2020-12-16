@@ -61,12 +61,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/api/user/**").permitAll()
 			.antMatchers("/api/recursos/**").permitAll()
 			.antMatchers("/api/preguntas/**").permitAll()
-			.antMatchers("/api/opcions/**").permitAll()
 			.antMatchers("/api/quizs/**").permitAll()
 			.antMatchers("/api/quizpres/**").permitAll()
 			.antMatchers("/api/prerecurs/**").permitAll()
 			.antMatchers("/api/tags/**").permitAll()
 			.antMatchers("/api/tagpres/**").permitAll()
+			.antMatchers("/api/carreras/**").permitAll()
+			.antMatchers("/api/carreusus/**").permitAll()
+			.antMatchers("/api/ramos/**").permitAll()
+			.antMatchers("/api/carreramos/**").permitAll()
+			.antMatchers("/api/cursos/**").permitAll()
+			.antMatchers("/api/curusus/**").permitAll()
+			.antMatchers("/api/quizcurs/**").permitAll()
+			.antMatchers("/api/respuestas/**").permitAll()
+			.antMatchers("/api/retroalimentacions/**").permitAll()
+			.antMatchers("/api/tagquizs/**").permitAll()
 			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

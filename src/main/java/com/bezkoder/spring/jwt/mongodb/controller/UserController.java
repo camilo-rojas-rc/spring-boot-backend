@@ -7,6 +7,8 @@ import java.util.Set;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +19,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bezkoder.spring.jwt.mongodb.model.User;
+import com.bezkoder.spring.jwt.mongodb.model.Pregunta;
 import com.bezkoder.spring.jwt.mongodb.repository.UserRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.PreguntaRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.CarreUsuRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.CurUsuRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.RoleRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.TagPreRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.QuizPreRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.PreRecurRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.RespuestaRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.RetroalimentacionRepository;
 
 import java.util.HashSet;
 
@@ -43,7 +54,31 @@ public class UserController {
 	PasswordEncoder encoder;
 
 	@Autowired
-	UserRepository userRepository;
+  UserRepository userRepository;
+  
+  @Autowired
+  PreguntaRepository preguntaRepository;
+  
+  @Autowired
+  CarreUsuRepository carreusuRepository;
+  
+  @Autowired
+  CurUsuRepository curusuRepository;
+
+  @Autowired
+  TagPreRepository tagpreRepository;
+
+  @Autowired
+  QuizPreRepository quizpreRepository;
+
+  @Autowired
+  PreRecurRepository prerecurRepository;
+
+  @Autowired
+  RespuestaRepository respuestaRepository;
+
+  @Autowired
+  RetroalimentacionRepository retroalimentacionRepository;
 
 	@GetMapping("/all")
 	public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) String username) {
@@ -115,5 +150,37 @@ public class UserController {
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-	}
+  }
+  
+  @DeleteMapping("/users/{id}")
+  public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
+    try {
+
+      List<Pregunta> preguntas = new ArrayList<>();
+      preguntaRepository.findByUsersContaining(id).forEach(preguntas::add);
+      
+      if (preguntas.isEmpty()) {
+        carreusuRepository.deleteByUsuarioid(id);
+        curusuRepository.deleteByUsuarioid(id);
+        respuestaRepository.deleteByUsuarioid(id);
+        userRepository.deleteById(id);
+      } else {
+        for(Pregunta pregunta : preguntas) {
+          tagpreRepository.deleteByPreguntaid(pregunta.getId());
+          quizpreRepository.deleteByPreguntaid(pregunta.getId());
+          prerecurRepository.deleteByPreguntaid(pregunta.getId());
+          respuestaRepository.deleteByPreguntaid(pregunta.getId());
+          retroalimentacionRepository.deleteByPreguntaid(pregunta.getId());
+          preguntaRepository.deleteById(pregunta.getId());
+        }
+        carreusuRepository.deleteByUsuarioid(id);
+        curusuRepository.deleteByUsuarioid(id);
+        respuestaRepository.deleteByUsuarioid(id);
+        userRepository.deleteById(id);
+      }
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }  
 }

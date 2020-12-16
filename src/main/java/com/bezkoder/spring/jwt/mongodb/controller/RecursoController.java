@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import com.bezkoder.spring.jwt.mongodb.model.Recurso;
 import com.bezkoder.spring.jwt.mongodb.security.services.RecursoService;
 import com.bezkoder.spring.jwt.mongodb.repository.RecursoRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.PreRecurRepository;
 import com.bezkoder.spring.jwt.mongodb.payload.response.MessageResponse;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -36,7 +37,10 @@ public class RecursoController {
     private RecursoService recursoService;
 
     @Autowired
-	  RecursoRepository recursoRepository;
+    RecursoRepository recursoRepository;
+    
+    @Autowired
+	  PreRecurRepository prerecurRepository;
 
     @GetMapping("/recursos/all")
     public ResponseEntity<List<Recurso>> getAllRecursos(@RequestParam(required = false) String title) {
@@ -79,6 +83,7 @@ public class RecursoController {
     @DeleteMapping("/recursos/{id}")
     public ResponseEntity<HttpStatus> deleteRecurso(@PathVariable("id") String id) {
       try {
+        prerecurRepository.deleteByRecursoid(id);
         recursoRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       } catch (Exception e) {

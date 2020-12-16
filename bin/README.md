@@ -1,7 +1,7 @@
-# Spring Boot, Spring Security, MongoDB - JWT Authentication & Authorization example
+# Spring Boot Overview
 
-For more detail, please visit:
-> [Spring Boot, MongoDB: JWT Authentication with Spring Security](https://bezkoder.com/spring-boot-jwt-auth-mongodb/)
+Para más información, visitar la documentación de Spring-Boot:
+> [Spring Boot Overview](https://spring.io/projects/spring-boot)
 
 ## Run Spring Boot application
 ```

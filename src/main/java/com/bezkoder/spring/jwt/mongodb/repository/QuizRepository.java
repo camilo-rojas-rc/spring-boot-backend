@@ -8,4 +8,5 @@ import com.bezkoder.spring.jwt.mongodb.model.Quiz;
 
 public interface QuizRepository extends MongoRepository<Quiz, String> {
     List<Quiz> findByTituloContaining(String titulo);
+    String deleteByCursoid(String cursoid);
 }

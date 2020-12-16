@@ -8,4 +8,5 @@ import com.bezkoder.spring.jwt.mongodb.model.Pregunta;
 
 public interface PreguntaRepository extends MongoRepository<Pregunta, String> {
   List<Pregunta> findByTituloContaining(String titulo);
+  List<Pregunta> findByUsersContaining(String users);
 }

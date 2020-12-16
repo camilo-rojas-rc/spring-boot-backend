@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bezkoder.spring.jwt.mongodb.model.Quiz;
 import com.bezkoder.spring.jwt.mongodb.repository.QuizRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.QuizPreRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.QuizCurRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.TagQuizRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.RespuestaRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -31,6 +35,18 @@ public class QuizController {
 
   @Autowired
   QuizRepository quizRepository;
+
+  @Autowired
+  QuizPreRepository quizpreRepository;
+
+  @Autowired
+  QuizCurRepository quizcurRepository;
+
+  @Autowired
+  TagQuizRepository tagquizRepository;
+
+  @Autowired
+  RespuestaRepository respuestaRepository;
 
   @GetMapping("/quizs/all")
   public ResponseEntity<List<Quiz>> getAllQuizs(@RequestParam(required = false) String titulo) {
@@ -68,7 +84,7 @@ public class QuizController {
     try {
       Quiz _quiz = quizRepository.save(new Quiz(quiz.getTitulo(), quiz.getDescripcion(), 
       quiz.getActivo(), quiz.getTiempodisponible(), quiz.getRandom(), quiz.getFechacreacion(),
-      quiz.getFechatermino()));
+      quiz.getFechatermino(), quiz.getCursoid()));
       return new ResponseEntity<>(_quiz, HttpStatus.CREATED);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -88,6 +104,7 @@ public class QuizController {
       _quiz.setRandom(quiz.getRandom());
       _quiz.setFechacreacion(quiz.getFechacreacion());
       _quiz.setFechatermino(quiz.getFechatermino());
+      _quiz.setCursoid(quiz.getCursoid());
       return new ResponseEntity<>(quizRepository.save(_quiz ), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -97,6 +114,10 @@ public class QuizController {
   @DeleteMapping("/quizs/{id}")
   public ResponseEntity<HttpStatus> deleteQuiz(@PathVariable("id") String id) {
     try {
+      quizpreRepository.deleteByQuizid(id);
+      quizcurRepository.deleteByQuizid(id);
+      tagquizRepository.deleteByQuizid(id);
+      respuestaRepository.deleteByQuizid(id);
       quizRepository.deleteById(id);
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     } catch (Exception e) {

@@ -39,11 +39,15 @@ public class Quiz {
   @Size(max = 50)
   private String fechatermino;
 
+  @NotBlank
+  @Size(max = 50)
+  private String cursoid;
+
   public Quiz() {
     
   }
 
-  public Quiz(String titulo, String descripcion, boolean activo, String tiempodisponible, boolean random, String fechacreacion, String fechatermino) {
+  public Quiz(String titulo, String descripcion, boolean activo, String tiempodisponible, boolean random, String fechacreacion, String fechatermino, String cursoid) {
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.activo = activo;
@@ -51,6 +55,7 @@ public class Quiz {
     this.random = random;
     this.fechacreacion = fechacreacion;
     this.fechatermino = fechatermino;
+    this.cursoid = cursoid;
   }
 
   public String getId() {
@@ -116,12 +121,20 @@ public class Quiz {
   public void setFechatermino(String fechatermino) {
     this.fechatermino = fechatermino;
   } 
+
+  public String getCursoid() {
+    return cursoid;
+  }
+
+  public void setCursoid(String cursoid) {
+    this.cursoid = cursoid;
+  } 
   
   @Override
     public String toString() {
         return "Quiz [id=" + id + ", titulo=" + titulo + ", descripcion=" + descripcion + 
         ", activo=" + activo + ", tiempodisponible=" + tiempodisponible + 
         ", random=" + random + ", fechacreacion=" + fechacreacion + 
-        ", fechatermino=" + fechatermino +"]";
+        ", fechatermino=" + fechatermino + ", cursoid=" + cursoid +"]";
     }
 }
