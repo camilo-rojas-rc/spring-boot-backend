@@ -61,13 +61,13 @@ public class RecursoController {
     }
 
     @PostMapping("/recursos/add")
-    public ResponseEntity<?> addRecurso(@RequestParam("title") String title, @RequestParam("type") String type, @RequestParam(required = false) String link, @RequestParam("resource") MultipartFile resource) throws IOException {
+    public ResponseEntity<?> addRecurso(@RequestParam("title") String title, @RequestParam("type") String type, @RequestParam(required = false) String link, @RequestParam("privado") boolean privado, @RequestParam("users") String users, @RequestParam("resource") MultipartFile resource) throws IOException {
       try {
         if (link != null) {
           link = link.substring(32);
         }
         
-        String recurso = recursoService.addRecurso(title, type, link, resource);
+        String recurso = recursoService.addRecurso(title, type, link, privado, users, resource);
         return new ResponseEntity<>(recurso, HttpStatus.CREATED);
       } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

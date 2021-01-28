@@ -3,6 +3,9 @@ package com.bezkoder.spring.jwt.mongodb.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +22,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bezkoder.spring.jwt.mongodb.model.QuizPre;
+import com.bezkoder.spring.jwt.mongodb.model.Pregunta;
+import com.bezkoder.spring.jwt.mongodb.model.Respuesta;
+import com.bezkoder.spring.jwt.mongodb.model.Retroalimentacion;
+import com.bezkoder.spring.jwt.mongodb.model.PreRecur;
+import com.bezkoder.spring.jwt.mongodb.model.TagPre;
 import com.bezkoder.spring.jwt.mongodb.repository.QuizPreRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.PreguntaRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.RespuestaRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.RetroalimentacionRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.PreRecurRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.TagPreRepository;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -28,6 +41,9 @@ public class QuizPreController {
 
   @Autowired
   QuizPreRepository quizpreRepository;
+
+  @Autowired
+  PreguntaRepository preguntaRepository;
 
   @GetMapping("/quizpres/all")
   public ResponseEntity<List<QuizPre>> getAllQuizPres() {
@@ -46,12 +62,86 @@ public class QuizPreController {
     }
   }
 
+  @GetMapping("/quizpres/quizpre-chart")
+  public ResponseEntity<?> countByPrerecur() {
+    try {
+      ArrayList<String> datos = new ArrayList<String>();
+      List<QuizPre> quizpres = new ArrayList<>();
+      quizpreRepository.findAll().forEach(quizpres::add);
+     
+      if (quizpres.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      } else {
+        ArrayList<String> preguntaids = new ArrayList<String>();
+  
+        for (QuizPre quizpre : quizpres) {
+          String pid = quizpre.getPreguntaid();
+          preguntaids.add(pid);
+        }
+        
+        Set<String> hashSet = new HashSet<String>(preguntaids);
+        preguntaids.clear();
+        preguntaids.addAll(hashSet);
+  
+        for (String preguntaid : preguntaids) {
+          List<QuizPre> preguntas = new ArrayList<>();
+          quizpreRepository.findByPreguntaidContaining(preguntaid).forEach(preguntas::add);
+         
+          int tamanio = preguntas.size();
+          String cantidad = String.valueOf(tamanio);
+          String id = preguntaid;
+  
+          Optional<Pregunta> preguntaData = preguntaRepository.findById(id);
+          if (preguntaData.isPresent()) {
+            Pregunta _pregunta  = preguntaData.get();
+            datos.add(_pregunta.getTitulo());
+            datos.add(cantidad);
+          } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+          }
+        }
+      }
+  
+      return new ResponseEntity<>(datos, HttpStatus.CREATED);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+ 
   @PostMapping("/quizpres/add")
   public ResponseEntity<QuizPre> createQuizPre(@RequestBody QuizPre QuizPre) {
     try {
+      int cont = 0;
+      List<QuizPre> datos = new ArrayList<>();
       QuizPre quizpre = new QuizPre(QuizPre.getQuizid(), QuizPre.getPreguntaid());
-		  quizpreRepository.save(quizpre);
-      return new ResponseEntity<>(quizpre, HttpStatus.CREATED);
+
+      String preguntaid = quizpre.getPreguntaid();
+      String quizid = quizpre.getQuizid();
+      quizpreRepository.findAll().forEach(datos::add);
+
+      if (datos.isEmpty()) {
+        quizpreRepository.save(quizpre);
+      } else {
+        for (QuizPre dato : datos) {
+          String preguntaid2 = dato.getPreguntaid();
+          String quizid2 = dato.getQuizid();
+          boolean comparacion1 = preguntaid2.equals(preguntaid);
+          boolean comparacion2 = quizid2.equals(quizid);
+          if (comparacion1 == true){
+            if (comparacion2 == true){
+              cont = 1;
+            }
+          }
+        }
+      }
+
+      if (cont == 0){
+        quizpreRepository.save(quizpre);
+        return new ResponseEntity<>(quizpre, HttpStatus.CREATED);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
+
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }

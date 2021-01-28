@@ -17,49 +17,39 @@ public class Pregunta {
 
   @NotBlank
   @Size(max = 50)
-  private String tipo;
+  private String tipo = "alternativa";
 
   @NotBlank
   @Size(max = 200)
   private String enunciado;
 
-  @NotBlank
   @Size(max = 200)
   private String opcion1 = null;
 
-  @NotBlank
   @Size(max = 200)
   private String opcion2 = null;
 
-  @NotBlank
   @Size(max = 200)
   private String opcion3 = null;
 
-  @NotBlank
   @Size(max = 200)
   private String opcion4 = null;
 
-  @NotBlank
   @Size(max = 200)
   private String opcion5 = null;
 
-  @NotBlank
   @Size(max = 20)
   private String respuesta1 = null;
 
-  @NotBlank
   @Size(max = 20)
   private String respuesta2 = null;
 
-  @NotBlank
   @Size(max = 20)
   private String respuesta3 = null;
 
-  @NotBlank
   @Size(max = 20)
   private String respuesta4 = null;
 
-  @NotBlank
   @Size(max = 20)
   private String respuesta5 = null;
 
@@ -77,13 +67,17 @@ public class Pregunta {
 
   @NotBlank
   @Size(max = 50)
+  private boolean privado = false;
+
+  @NotBlank
+  @Size(max = 50)
   private String users;
 
   public Pregunta() {
 
   }
 
-  public Pregunta(String titulo, String tipo, String enunciado, String opcion1, String opcion2, String opcion3, String opcion4, String opcion5, String respuesta1, String respuesta2, String respuesta3, String respuesta4, String respuesta5, String tiemporespuesta, String puntaje, boolean random, String users) {
+  public Pregunta(String titulo, String tipo, String enunciado, String opcion1, String opcion2, String opcion3, String opcion4, String opcion5, String respuesta1, String respuesta2, String respuesta3, String respuesta4, String respuesta5, String tiemporespuesta, String puntaje, boolean random, boolean privado, String users) {
     this.titulo = titulo;
     this.tipo = tipo;
     this.enunciado = enunciado;
@@ -100,6 +94,7 @@ public class Pregunta {
     this.tiemporespuesta = tiemporespuesta;
     this.puntaje = puntaje;
     this.random = random;
+    this.privado = privado;
     this.users = users;
   }
 
@@ -239,6 +234,14 @@ public class Pregunta {
     this.random = random;
   }
 
+  public boolean getPrivado() {
+    return privado;
+  }
+
+  public void setPrivado(boolean privado) {
+    this.privado = privado;
+  }
+
   public String getUser() {
     return users;
   }
@@ -253,6 +256,6 @@ public class Pregunta {
         ", opcion1=" + opcion1 + ", opcion2=" + opcion2 + ", opcion3=" + opcion3 + ", opcion4=" + opcion4 + 
         ", opcion5=" + opcion5 + ", respuesta1=" + respuesta1 + ", respuesta2=" + respuesta2 + 
         ", respuesta3=" + respuesta3 + ", respuesta4=" + respuesta4 + ", respuesta5=" + respuesta5 + 
-        ", tiemporespuesta=" + tiemporespuesta + ", puntaje=" + puntaje + ", random=" + random + ", users=" + users + "]";
+        ", tiemporespuesta=" + tiemporespuesta + ", puntaje=" + puntaje + ", random=" + random + ", privado=" + privado + ", users=" + users + "]";
     }
 }

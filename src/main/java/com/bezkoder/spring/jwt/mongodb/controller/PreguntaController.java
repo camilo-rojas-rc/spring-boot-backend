@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bezkoder.spring.jwt.mongodb.model.Pregunta;
 import com.bezkoder.spring.jwt.mongodb.model.TagPre;
+import com.bezkoder.spring.jwt.mongodb.model.Respuesta;
+import com.bezkoder.spring.jwt.mongodb.model.Retroalimentacion;
+import com.bezkoder.spring.jwt.mongodb.model.PreRecur;
+import com.bezkoder.spring.jwt.mongodb.model.QuizPre;
 import com.bezkoder.spring.jwt.mongodb.repository.PreguntaRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.TagPreRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.QuizPreRepository;
@@ -72,6 +76,58 @@ public class PreguntaController {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+
+  @GetMapping("/preguntas/preguntas-chart/{id}")
+  public ResponseEntity<?> countById(@PathVariable("id") String id) {
+    try {
+      ArrayList<String> datos = new ArrayList<String>();
+
+      List<QuizPre> quizpres = new ArrayList<>();
+      quizpreRepository.findByPreguntaidContaining(id).forEach(quizpres::add);
+
+      List<Respuesta> respuestas = new ArrayList<>();
+      respuestaRepository.findByPreguntaidContaining(id).forEach(respuestas::add);
+
+      List<Retroalimentacion> retroalimentacions = new ArrayList<>();
+      retroalimentacionRepository.findByPreguntaidContaining(id).forEach(retroalimentacions::add);
+
+      List<PreRecur> prerecurs = new ArrayList<>();
+      prerecurRepository.findByPreguntaidContaining(id).forEach(prerecurs::add);
+
+      List<TagPre> tagpres = new ArrayList<>();
+      tagpreRepository.findByPreguntaidContaining(id).forEach(tagpres::add);
+
+      int tamanio1 = quizpres.size();
+      String cantquiz = String.valueOf(tamanio1);
+      datos.add("Quiz");
+      datos.add(cantquiz);
+
+      int tamanio2 = respuestas.size();
+      String cantres = String.valueOf(tamanio2);
+      datos.add("Respuesta");
+      datos.add(cantres);
+
+      int tamanio3 = retroalimentacions.size();
+      String cantretro = String.valueOf(tamanio3);
+      datos.add("Retroalimentacion");
+      datos.add(cantretro);
+
+      int tamanio4 = prerecurs.size();
+      String cantrecur = String.valueOf(tamanio4);
+      datos.add("Recurso");
+      datos.add(cantrecur);
+
+      int tamanio5 = tagpres.size();
+      String canttag = String.valueOf(tamanio5);
+      datos.add("Tag");
+      datos.add(canttag);
+  
+      return new ResponseEntity<>(datos, HttpStatus.CREATED);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
   
   @GetMapping("/preguntas/{id}")
   public ResponseEntity<Pregunta> getPreguntaById(@PathVariable("id") String id) {
@@ -92,7 +148,7 @@ public class PreguntaController {
       pregunta.getOpcion2(), pregunta.getOpcion3(), pregunta.getOpcion4(), 
       pregunta.getOpcion5(), pregunta.getRespuesta1(), pregunta.getRespuesta2(),
       pregunta.getRespuesta3(), pregunta.getRespuesta4(), pregunta.getRespuesta5(), pregunta.getTiempoRespuesta(),
-      pregunta.getPuntaje(), pregunta.getRandom(), pregunta.getUser()));
+      pregunta.getPuntaje(), pregunta.getRandom(), pregunta.getPrivado(), pregunta.getUser()));
       return new ResponseEntity<>(_pregunta, HttpStatus.CREATED);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -121,6 +177,7 @@ public class PreguntaController {
       _pregunta.setTiempoRespuesta(pregunta.getTiempoRespuesta());
       _pregunta.setPuntaje(pregunta.getPuntaje());
       _pregunta.setRandom(pregunta.getRandom());
+      _pregunta.setPrivado(pregunta.getPrivado());
       _pregunta.setUser(pregunta.getUser());
       return new ResponseEntity<>(preguntaRepository.save(_pregunta ), HttpStatus.OK);
     } else {

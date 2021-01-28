@@ -3,6 +3,7 @@ package com.bezkoder.spring.jwt.mongodb.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Optional;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,12 +21,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bezkoder.spring.jwt.mongodb.model.User;
 import com.bezkoder.spring.jwt.mongodb.model.Pregunta;
+import com.bezkoder.spring.jwt.mongodb.model.Respuesta;
+import com.bezkoder.spring.jwt.mongodb.model.TagPre;
+import com.bezkoder.spring.jwt.mongodb.model.Tag;
 import com.bezkoder.spring.jwt.mongodb.repository.UserRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.PreguntaRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.CarreUsuRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.CurUsuRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.UsuQuizRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.RoleRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.TagPreRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.TagRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.QuizPreRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.PreRecurRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.RespuestaRepository;
@@ -44,7 +50,7 @@ import com.bezkoder.spring.jwt.mongodb.payload.response.MessageResponse;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 public class UserController {
 
 	@Autowired
@@ -66,7 +72,13 @@ public class UserController {
   CurUsuRepository curusuRepository;
 
   @Autowired
+  UsuQuizRepository usuquizRepository;
+
+  @Autowired
   TagPreRepository tagpreRepository;
+
+  @Autowired
+  TagRepository tagRepository;
 
   @Autowired
   QuizPreRepository quizpreRepository;
@@ -80,7 +92,7 @@ public class UserController {
   @Autowired
   RetroalimentacionRepository retroalimentacionRepository;
 
-	@GetMapping("/all")
+	@GetMapping("users/all")
 	public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) String username) {
 	  try {
 		List<User> users = new ArrayList<User>();
@@ -99,26 +111,76 @@ public class UserController {
 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
 	}
+
+	@GetMapping("/users/users-chart/{id}")
+	public ResponseEntity<?> countById(@PathVariable("id") String id) {
+	  try {
+		ArrayList<String> datos = new ArrayList<String>();
+		List<Respuesta> respuestaids = new ArrayList<>();
+		respuestaRepository.findByUsuarioidContaining(id).forEach(respuestaids::add);
+
+		List<Tag> tags = new ArrayList<>();
+		tagRepository.findAll().forEach(tags::add);
+  
+		if (respuestaids.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} else {
+			if (tags.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			} else {
+				for (Tag tag : tags) {
+					List<TagPre> tagpres = new ArrayList<>();
+					tagpreRepository.findByTagidContaining(tag.getId()).forEach(tagpres::add);
+
+					if (!tagpres.isEmpty()) {
+						int puntaje = 0;
+						String total;
+						for (TagPre tagpre : tagpres) {
+							List<Respuesta> respuestas = new ArrayList<>();
+							respuestaRepository.findByPreguntaidContaining(tagpre.getPreguntaid()).forEach(respuestas::add);
+
+							if (!respuestas.isEmpty()) {
+								for (Respuesta respuesta : respuestas) {
+									String usuarioid = respuesta.getUsuarioid();
+									boolean comparacion = usuarioid.equals(id);
+									if (comparacion == true){
+										puntaje = puntaje + Integer.valueOf(respuesta.getPuntaje());
+									}
+								}
+							}
+						}
+						datos.add(tag.getNombre());
+						total = String.valueOf(puntaje);
+						datos.add(total);
+					}
+				}
+			}
+		}
+			return new ResponseEntity<>(datos, HttpStatus.CREATED);
+	} catch (Exception e) {
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+  }
 	
-	@GetMapping("/user")
+	@GetMapping("users/user")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('TEACHER')")
 	public String userAccess() {
 		return "User Content.";
 	}
 
-	@GetMapping("/mod")
+	@GetMapping("users/mod")
 	@PreAuthorize("hasRole('MODERATOR')")
 	public String moderatorAccess() {
 		return "Moderator Board.";
 	}
 
-	@GetMapping("/teacher")
+	@GetMapping("users/teacher")
 	@PreAuthorize("hasRole('TEACHER')")
 	public String adminAccess() {
 		return "teacher Board.";
 	}
 
-	@PostMapping("/users")
+	@PostMapping("users/teacher-add")
 	public ResponseEntity<?> createUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
@@ -141,9 +203,9 @@ public class UserController {
 		Set<Role> roles = new HashSet<>();
 
 		if (strRoles == null) {
-			Role adminRole = roleRepository.findByName(ERole.teacher)
+			Role teacherRole = roleRepository.findByName(ERole.teacher)
 				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-			roles.add(adminRole);
+			roles.add(teacherRole);
 		}
 
 		user.setRoles(roles);
@@ -152,7 +214,7 @@ public class UserController {
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
   
-  @DeleteMapping("/users/{id}")
+  @DeleteMapping("users/{id}")
   public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
     try {
 
@@ -162,7 +224,8 @@ public class UserController {
       if (preguntas.isEmpty()) {
         carreusuRepository.deleteByUsuarioid(id);
         curusuRepository.deleteByUsuarioid(id);
-        respuestaRepository.deleteByUsuarioid(id);
+		respuestaRepository.deleteByUsuarioid(id);
+		usuquizRepository.deleteByUsuarioid(id);
         userRepository.deleteById(id);
       } else {
         for(Pregunta pregunta : preguntas) {
@@ -175,7 +238,8 @@ public class UserController {
         }
         carreusuRepository.deleteByUsuarioid(id);
         curusuRepository.deleteByUsuarioid(id);
-        respuestaRepository.deleteByUsuarioid(id);
+		respuestaRepository.deleteByUsuarioid(id);
+		usuquizRepository.deleteByUsuarioid(id);
         userRepository.deleteById(id);
       }
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);

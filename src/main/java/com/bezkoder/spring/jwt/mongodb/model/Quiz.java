@@ -41,13 +41,17 @@ public class Quiz {
 
   @NotBlank
   @Size(max = 50)
+  private boolean privado = false;
+
+  @NotBlank
+  @Size(max = 50)
   private String cursoid;
 
   public Quiz() {
     
   }
 
-  public Quiz(String titulo, String descripcion, boolean activo, String tiempodisponible, boolean random, String fechacreacion, String fechatermino, String cursoid) {
+  public Quiz(String titulo, String descripcion, boolean activo, String tiempodisponible, boolean random, String fechacreacion, String fechatermino, boolean privado, String cursoid) {
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.activo = activo;
@@ -55,6 +59,7 @@ public class Quiz {
     this.random = random;
     this.fechacreacion = fechacreacion;
     this.fechatermino = fechatermino;
+    this.privado = privado;
     this.cursoid = cursoid;
   }
 
@@ -122,6 +127,14 @@ public class Quiz {
     this.fechatermino = fechatermino;
   } 
 
+  public boolean getPrivado() {
+    return privado;
+  }
+
+  public void setPrivado(boolean privado) {
+    this.privado = privado;
+  }
+
   public String getCursoid() {
     return cursoid;
   }
@@ -135,6 +148,6 @@ public class Quiz {
         return "Quiz [id=" + id + ", titulo=" + titulo + ", descripcion=" + descripcion + 
         ", activo=" + activo + ", tiempodisponible=" + tiempodisponible + 
         ", random=" + random + ", fechacreacion=" + fechacreacion + 
-        ", fechatermino=" + fechatermino + ", cursoid=" + cursoid +"]";
+        ", fechatermino=" + fechatermino + ", privado=" + privado + ", cursoid=" + cursoid + "]";
     }
 }

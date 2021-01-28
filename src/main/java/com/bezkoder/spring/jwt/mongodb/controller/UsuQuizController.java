@@ -18,52 +18,52 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bezkoder.spring.jwt.mongodb.model.CurUsu;
-import com.bezkoder.spring.jwt.mongodb.repository.CurUsuRepository;
+import com.bezkoder.spring.jwt.mongodb.model.UsuQuiz;
+import com.bezkoder.spring.jwt.mongodb.repository.UsuQuizRepository;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
-public class CurUsuController {
+public class UsuQuizController {
 
   @Autowired
-  CurUsuRepository curusuRepository;
+  UsuQuizRepository usuquizRepository;
 
-  @GetMapping("/curusus/all")
-  public ResponseEntity<List<CurUsu>> getAllCurUsus() {
+  @GetMapping("/usuquizs/all")
+  public ResponseEntity<List<UsuQuiz>> getAllUsuQuizs() {
     try {
-      List<CurUsu> curusu = new ArrayList<CurUsu>();
+      List<UsuQuiz> usuquiz = new ArrayList<UsuQuiz>();
 
-      curusuRepository.findAll().forEach(curusu::add);
+      usuquizRepository.findAll().forEach(usuquiz::add);
   
-      if (curusu.isEmpty()) {
+      if (usuquiz.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }
   
-      return new ResponseEntity<>(curusu, HttpStatus.OK);
+      return new ResponseEntity<>(usuquiz, HttpStatus.OK);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @PostMapping("/curusus/add")
-  public ResponseEntity<CurUsu> createCurUsu(@RequestBody CurUsu CurUsu) {
+  @PostMapping("/usuquizs/add")
+  public ResponseEntity<UsuQuiz> createUsuQuiz(@RequestBody UsuQuiz UsuQuiz) {
     try {
       int cont = 0;
-      List<CurUsu> datos = new ArrayList<>();
-      CurUsu curusu = new CurUsu(CurUsu.getCursoid(), CurUsu.getUsuarioid());
+      List<UsuQuiz> datos = new ArrayList<>();
+      UsuQuiz usuquiz = new UsuQuiz(UsuQuiz.getUsuarioid(), UsuQuiz.getQuizid(), UsuQuiz.getPuntajetotal());
 
-      String cursoid = curusu.getCursoid();
-      String usuarioid = curusu.getUsuarioid();
-      curusuRepository.findAll().forEach(datos::add);
+      String quizid = usuquiz.getQuizid();
+      String usuarioid = usuquiz.getUsuarioid();
+      usuquizRepository.findAll().forEach(datos::add);
 
       if (datos.isEmpty()) {
-        curusuRepository.save(curusu);
+        usuquizRepository.save(usuquiz);
       } else {
-        for (CurUsu dato : datos) {
-          String cursoid2 = dato.getCursoid();
+        for (UsuQuiz dato : datos) {
+          String quizid2 = dato.getQuizid();
           String usuarioid2 = dato.getUsuarioid();
-          boolean comparacion1 = cursoid2.equals(cursoid);
+          boolean comparacion1 = quizid2.equals(quizid);
           boolean comparacion2 = usuarioid2.equals(usuarioid);
           if (comparacion1 == true){
             if (comparacion2 == true){
@@ -74,8 +74,8 @@ public class CurUsuController {
       }
 
       if (cont == 0){
-        curusuRepository.save(curusu);
-        return new ResponseEntity<>(curusu, HttpStatus.CREATED);
+        usuquizRepository.save(usuquiz);
+        return new ResponseEntity<>(usuquiz, HttpStatus.CREATED);
       } else {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
       }
@@ -85,24 +85,25 @@ public class CurUsuController {
     }
   }
   
-  @PutMapping("/curusus/{id}")
-  public ResponseEntity<CurUsu> updateCurUsu(@PathVariable("id") String id, @RequestBody CurUsu curusu) {
-    Optional<CurUsu> curusuData = curusuRepository.findById(id);
+  @PutMapping("/usuquizs/{id}")
+  public ResponseEntity<UsuQuiz> updateUsuQuiz(@PathVariable("id") String id, @RequestBody UsuQuiz usuquiz) {
+    Optional<UsuQuiz> usuquizData = usuquizRepository.findById(id);
   
-    if (curusuData.isPresent()) {
-      CurUsu _curusu  = curusuData.get();
-      _curusu .setCursoid(curusu.getCursoid());
-      _curusu .setUsuarioid(curusu.getUsuarioid());
-      return new ResponseEntity<>(curusuRepository.save(_curusu ), HttpStatus.OK);
+    if (usuquizData.isPresent()) {
+      UsuQuiz _usuquiz  = usuquizData.get();
+      _usuquiz .setUsuarioid(usuquiz.getUsuarioid());
+      _usuquiz .setQuizid(usuquiz.getQuizid());
+      _usuquiz .setPuntajetotal(usuquiz.getPuntajetotal());
+      return new ResponseEntity<>(usuquizRepository.save(_usuquiz ), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
   
-  @DeleteMapping("/curusus/{id}")
-  public ResponseEntity<HttpStatus> deleteCurUsu(@PathVariable("id") String id) {
+  @DeleteMapping("/usuquizs/{id}")
+  public ResponseEntity<HttpStatus> deleteUsuQuiz(@PathVariable("id") String id) {
     try {
-      curusuRepository.deleteById(id);
+      usuquizRepository.deleteById(id);
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     } catch (Exception e) {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

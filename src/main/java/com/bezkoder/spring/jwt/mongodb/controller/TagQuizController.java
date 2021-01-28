@@ -49,9 +49,37 @@ public class TagQuizController {
   @PostMapping("/tagquizs/add")
   public ResponseEntity<TagQuiz> createTagQuiz(@RequestBody TagQuiz TagQuiz) {
     try {
+      int cont = 0;
+      List<TagQuiz> datos = new ArrayList<>();
       TagQuiz tagquiz = new TagQuiz(TagQuiz.getTagid(), TagQuiz.getQuizid());
-		  tagquizRepository.save(tagquiz);
-      return new ResponseEntity<>(tagquiz, HttpStatus.CREATED);
+
+      String quizid = tagquiz.getQuizid();
+      String tagid = tagquiz.getTagid();
+      tagquizRepository.findAll().forEach(datos::add);
+
+      if (datos.isEmpty()) {
+        tagquizRepository.save(tagquiz);
+      } else {
+        for (TagQuiz dato : datos) {
+          String quizid2 = dato.getQuizid();
+          String tagid2 = dato.getTagid();
+          boolean comparacion1 = quizid2.equals(quizid);
+          boolean comparacion2 = tagid2.equals(tagid);
+          if (comparacion1 == true){
+            if (comparacion2 == true){
+              cont = 1;
+            }
+          }
+        }
+      }
+
+      if (cont == 0){
+        tagquizRepository.save(tagquiz);
+        return new ResponseEntity<>(tagquiz, HttpStatus.CREATED);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
+
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }

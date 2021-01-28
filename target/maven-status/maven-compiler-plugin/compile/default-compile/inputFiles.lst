@@ -19,6 +19,7 @@
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/model/User.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/QuizPreController.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/PreguntaRepository.java
+/home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/UsuQuizController.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/TagQuizController.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/RespuestaRepository.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/model/Carrera.java
@@ -37,6 +38,7 @@
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/model/Curso.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/CarreraRepository.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/QuizCurRepository.java
+/home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/model/UsuQuiz.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/RecursoRepository.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/TagPreController.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/model/CarreUsu.java
@@ -62,6 +64,7 @@
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/model/CarreRamo.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/TagRepository.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/security/jwt/AuthTokenFilter.java
+/home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/UsuQuizRepository.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/model/Tag.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/security/WebSecurityConfig.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/TagQuizRepository.java

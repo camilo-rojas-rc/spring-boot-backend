@@ -49,9 +49,37 @@ public class CarreUsuController {
   @PostMapping("/carreusus/add")
   public ResponseEntity<CarreUsu> createCarreUsu(@RequestBody CarreUsu CarreUsu) {
     try {
+      int cont = 0;
+      List<CarreUsu> datos = new ArrayList<>();
       CarreUsu carreusu = new CarreUsu(CarreUsu.getCarreraid(), CarreUsu.getUsuarioid());
-		  carreusuRepository.save(carreusu);
-      return new ResponseEntity<>(carreusu, HttpStatus.CREATED);
+
+      String carreraid = carreusu.getCarreraid();
+      String usuarioid = carreusu.getUsuarioid();
+      carreusuRepository.findAll().forEach(datos::add);
+
+      if (datos.isEmpty()) {
+        carreusuRepository.save(carreusu);
+      } else {
+        for (CarreUsu dato : datos) {
+          String carreraid2 = dato.getCarreraid();
+          String usuarioid2 = dato.getUsuarioid();
+          boolean comparacion1 = carreraid2.equals(carreraid);
+          boolean comparacion2 = usuarioid2.equals(usuarioid);
+          if (comparacion1 == true){
+            if (comparacion2 == true){
+              cont = 1;
+            }
+          }
+        }
+      }
+
+      if (cont == 0){
+        carreusuRepository.save(carreusu);
+        return new ResponseEntity<>(carreusu, HttpStatus.CREATED);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
+
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }

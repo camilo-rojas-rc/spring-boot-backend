@@ -22,8 +22,8 @@ public class RecursoService {
         return recursoRepo.findById(id).get();
     }
 
-    public String addRecurso(String title, String type, @RequestParam(required = false) String link, MultipartFile file) throws IOException {
-        Recurso recurso = new Recurso(title, type, link);
+    public String addRecurso(String title, String type, @RequestParam(required = false) String link, boolean privado, String users, MultipartFile file) throws IOException {
+        Recurso recurso = new Recurso(title, type, link, privado, users);
         recurso.setRecurso(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
         recurso = recursoRepo.insert(recurso);
         return recurso.getId();

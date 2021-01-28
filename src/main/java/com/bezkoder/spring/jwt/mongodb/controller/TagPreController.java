@@ -49,9 +49,37 @@ public class TagPreController {
   @PostMapping("/tagpres/add")
   public ResponseEntity<TagPre> createTagPre(@RequestBody TagPre TagPre) {
     try {
+      int cont = 0;
+      List<TagPre> datos = new ArrayList<>();
       TagPre tagpre = new TagPre(TagPre.getTagid(), TagPre.getPreguntaid());
-		  tagpreRepository.save(tagpre);
-      return new ResponseEntity<>(tagpre, HttpStatus.CREATED);
+
+      String preguntaid = tagpre.getPreguntaid();
+      String tagid = tagpre.getTagid();
+      tagpreRepository.findAll().forEach(datos::add);
+
+      if (datos.isEmpty()) {
+        tagpreRepository.save(tagpre);
+      } else {
+        for (TagPre dato : datos) {
+          String preguntaid2 = dato.getPreguntaid();
+          String tagid2 = dato.getTagid();
+          boolean comparacion1 = preguntaid2.equals(preguntaid);
+          boolean comparacion2 = tagid2.equals(tagid);
+          if (comparacion1 == true){
+            if (comparacion2 == true){
+              cont = 1;
+            }
+          }
+        }
+      }
+
+      if (cont == 0){
+        tagpreRepository.save(tagpre);
+        return new ResponseEntity<>(tagpre, HttpStatus.CREATED);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
+
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }

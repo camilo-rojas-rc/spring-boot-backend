@@ -49,9 +49,37 @@ public class QuizCurController {
   @PostMapping("/quizcurs/add")
   public ResponseEntity<QuizCur> createQuizCur(@RequestBody QuizCur QuizCur) {
     try {
+      int cont = 0;
+      List<QuizCur> datos = new ArrayList<>();
       QuizCur quizcur = new QuizCur(QuizCur.getQuizid(), QuizCur.getCursoid());
-		  quizcurRepository.save(quizcur);
-      return new ResponseEntity<>(quizcur, HttpStatus.CREATED);
+
+      String cursoid = quizcur.getCursoid();
+      String quizid = quizcur.getQuizid();
+      quizcurRepository.findAll().forEach(datos::add);
+
+      if (datos.isEmpty()) {
+        quizcurRepository.save(quizcur);
+      } else {
+        for (QuizCur dato : datos) {
+          String cursoid2 = dato.getCursoid();
+          String quizid2 = dato.getQuizid();
+          boolean comparacion1 = cursoid2.equals(cursoid);
+          boolean comparacion2 = quizid2.equals(quizid);
+          if (comparacion1 == true){
+            if (comparacion2 == true){
+              cont = 1;
+            }
+          }
+        }
+      }
+
+      if (cont == 0){
+        quizcurRepository.save(quizcur);
+        return new ResponseEntity<>(quizcur, HttpStatus.CREATED);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
+
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -40,6 +40,7 @@ com/bezkoder/spring/jwt/mongodb/repository/RoleRepository.class
 com/bezkoder/spring/jwt/mongodb/repository/CarreUsuRepository.class
 com/bezkoder/spring/jwt/mongodb/controller/RecursoController.class
 com/bezkoder/spring/jwt/mongodb/controller/TagPreController.class
+com/bezkoder/spring/jwt/mongodb/model/UsuQuiz.class
 com/bezkoder/spring/jwt/mongodb/controller/PreguntaController.class
 com/bezkoder/spring/jwt/mongodb/controller/PreRecurController.class
 com/bezkoder/spring/jwt/mongodb/security/WebSecurityConfig.class
@@ -58,12 +59,14 @@ com/bezkoder/spring/jwt/mongodb/repository/CursoRepository.class
 com/bezkoder/spring/jwt/mongodb/repository/PreRecurRepository.class
 com/bezkoder/spring/jwt/mongodb/repository/CarreRamoRepository.class
 com/bezkoder/spring/jwt/mongodb/controller/QuizPreController.class
+com/bezkoder/spring/jwt/mongodb/repository/UsuQuizRepository.class
 com/bezkoder/spring/jwt/mongodb/model/CarreUsu.class
 com/bezkoder/spring/jwt/mongodb/controller/CarreraController.class
 com/bezkoder/spring/jwt/mongodb/controller/CursoController.class
 com/bezkoder/spring/jwt/mongodb/controller/TagQuizController.class
 com/bezkoder/spring/jwt/mongodb/security/jwt/AuthEntryPointJwt.class
 com/bezkoder/spring/jwt/mongodb/repository/QuizCurRepository.class
+com/bezkoder/spring/jwt/mongodb/controller/UsuQuizController.class
 com/bezkoder/spring/jwt/mongodb/model/QuizCur.class
 com/bezkoder/spring/jwt/mongodb/payload/response/JwtResponse.class
 com/bezkoder/spring/jwt/mongodb/model/TagQuiz.class

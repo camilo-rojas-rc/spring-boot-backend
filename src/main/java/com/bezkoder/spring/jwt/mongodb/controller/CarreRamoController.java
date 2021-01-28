@@ -49,9 +49,37 @@ public class CarreRamoController {
   @PostMapping("/carreramos/add")
   public ResponseEntity<CarreRamo> createCarreRamo(@RequestBody CarreRamo CarreRamo) {
     try {
+      int cont = 0;
+      List<CarreRamo> datos = new ArrayList<>();
       CarreRamo carreramo = new CarreRamo(CarreRamo.getCarreraid(), CarreRamo.getRamoid());
-		  carreramoRepository.save(carreramo);
-      return new ResponseEntity<>(carreramo, HttpStatus.CREATED);
+
+      String carreraid = carreramo.getCarreraid();
+      String ramoid = carreramo.getRamoid();
+      carreramoRepository.findAll().forEach(datos::add);
+
+      if (datos.isEmpty()) {
+        carreramoRepository.save(carreramo);
+      } else {
+        for (CarreRamo dato : datos) {
+          String carreraid2 = dato.getCarreraid();
+          String ramoid2 = dato.getRamoid();
+          boolean comparacion1 = carreraid2.equals(carreraid);
+          boolean comparacion2 = ramoid2.equals(ramoid);
+          if (comparacion1 == true){
+            if (comparacion2 == true){
+              cont = 1;
+            }
+          }
+        }
+      }
+
+      if (cont == 0){
+        carreramoRepository.save(carreramo);
+        return new ResponseEntity<>(carreramo, HttpStatus.CREATED);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
+
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }

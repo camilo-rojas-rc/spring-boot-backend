@@ -11,4 +11,6 @@ public interface RespuestaRepository extends MongoRepository<Respuesta, String> 
     String deleteByUsuarioid(String usuarioid);
     String deleteByPreguntaid(String preguntaid);
     String deleteByQuizid(String quizid);
+    List<Respuesta> findByPreguntaidContaining(String preguntaid);
+    List<Respuesta> findByUsuarioidContaining(String usuarioid);
 }

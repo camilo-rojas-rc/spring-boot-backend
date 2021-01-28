@@ -23,13 +23,23 @@ public class Recurso {
 
     private String link = null;
 
+    @NotBlank
+    @Size(max = 50)
+    private boolean privado = false;
+
+    @NotBlank
+    @Size(max = 50)
+    private String users;
+
     private Binary resource;
 
-    public Recurso(String title, String type, String link) {
+    public Recurso(String title, String type, String link, boolean privado, String users) {
         super();
         this.title = title;
         this.type = type;
         this.link = link;
+        this.privado = privado;
+        this.users = users;
     }
 
     public String getId() {
@@ -64,6 +74,22 @@ public class Recurso {
         this.link = link;
     }
 
+    public boolean getPrivado() {
+        return privado;
+    }
+    
+    public void setPrivado(boolean privado) {
+        this.privado = privado;
+    }
+    
+    public String getUser() {
+        return users;
+    }
+    
+    public void setUser(String users) {
+        this.users = users;
+    }
+
     public Binary getRecurso() {
         return resource;
     }
@@ -74,6 +100,6 @@ public class Recurso {
     
     @Override
     public String toString() {
-        return "Recurso [id=" + id + ", title=" + title + ", type=" + type + ", link=" + link + ", resource=" + resource + "]";
+        return "Recurso [id=" + id + ", title=" + title + ", type=" + type + ", link=" + link + ", privado=" + privado + ", users=" + users + ", resource=" + resource + "]";
     }
 }

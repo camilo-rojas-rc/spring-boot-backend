@@ -15,23 +15,18 @@ public class Respuesta {
   @Size(max = 50)
   private String tiemporespuesta;
 
-  @NotBlank
   @Size(max = 50)
   private String respuesta1 = null;
 
-  @NotBlank
   @Size(max = 50)
   private String respuesta2 = null;
 
-  @NotBlank
   @Size(max = 50)
   private String respuesta3 = null;
 
-  @NotBlank
   @Size(max = 50)
   private String respuesta4 = null;
 
-  @NotBlank
   @Size(max = 50)
   private String respuesta5 = null;
 

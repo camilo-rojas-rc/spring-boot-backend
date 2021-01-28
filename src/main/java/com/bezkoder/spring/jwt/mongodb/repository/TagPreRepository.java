@@ -10,4 +10,7 @@ import com.bezkoder.spring.jwt.mongodb.model.TagPre;
 public interface TagPreRepository extends MongoRepository<TagPre, String> {
     String deleteByTagid(String tagid);
     String deleteByPreguntaid(String preguntaid);
+    List<TagPre> findByPreguntaidContaining(String preguntaid);
+    List<TagPre> findByTagidContaining(String tagid);
+    Optional<TagPre> findByPreguntaid(String preguntaid);
 }

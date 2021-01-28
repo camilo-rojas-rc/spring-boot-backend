@@ -61,17 +61,51 @@ public class RespuestaController {
   }
 
   @PostMapping("/respuestas/add")
-  public ResponseEntity<Respuesta> createRespuesta(@RequestBody Respuesta respuesta) {
+  public ResponseEntity<Respuesta> createRespuesta(@RequestBody Respuesta Respuesta) {
     try {
-      Respuesta _respuesta = respuestaRepository.save(new Respuesta(respuesta.getTiemporespuesta(), 
-      respuesta.getRespuesta1(), respuesta.getRespuesta2(), respuesta.getRespuesta3(), 
-      respuesta.getRespuesta4(), respuesta.getRespuesta5(), respuesta.getPuntaje(), 
-      respuesta.getUsuarioid(), respuesta.getPreguntaid(), respuesta.getQuizid()));
-      return new ResponseEntity<>(_respuesta, HttpStatus.CREATED);
+      int cont = 0;
+      List<Respuesta> datos = new ArrayList<>();
+      Respuesta _respuesta = new Respuesta(Respuesta.getTiemporespuesta(),
+      Respuesta.getRespuesta1(), Respuesta.getRespuesta2(), Respuesta.getRespuesta3(),
+      Respuesta.getRespuesta4(), Respuesta.getRespuesta5(), Respuesta.getPuntaje(),
+      Respuesta.getUsuarioid(), Respuesta.getPreguntaid(), Respuesta.getQuizid());
+  
+      String preguntaid = _respuesta.getPreguntaid();
+      String quizid = _respuesta.getQuizid();
+      String usuarioid = _respuesta.getUsuarioid();
+      respuestaRepository.findAll().forEach(datos::add);
+  
+      if (datos.isEmpty()) {
+        respuestaRepository.save(_respuesta);
+      } else {
+        for (Respuesta dato : datos) {
+          String preguntaid2 = dato.getPreguntaid();
+          String quizid2 = dato.getQuizid();
+          String usuarioid2 = dato.getUsuarioid();
+          boolean comparacion1 = preguntaid2.equals(preguntaid);
+          boolean comparacion2 = quizid2.equals(quizid);
+          boolean comparacion3 = usuarioid2.equals(usuarioid);
+          if (comparacion1 == true){
+            if (comparacion2 == true){
+              if (comparacion3 == true){
+                cont = 1;
+              }
+            }
+          }
+        }
+      }
+  
+      if (cont == 0){
+        respuestaRepository.save(_respuesta);
+        return new ResponseEntity<>(_respuesta, HttpStatus.CREATED);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
+  
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  }
+  } 
   
   @PutMapping("/respuestas/{id}")
   public ResponseEntity<Respuesta> updateRespuesta(@PathVariable("id") String id, @RequestBody Respuesta respuesta) {

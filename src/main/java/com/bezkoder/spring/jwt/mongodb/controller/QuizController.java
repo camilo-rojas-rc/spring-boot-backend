@@ -27,6 +27,7 @@ import com.bezkoder.spring.jwt.mongodb.repository.QuizPreRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.QuizCurRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.TagQuizRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.RespuestaRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.UsuQuizRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -41,6 +42,9 @@ public class QuizController {
 
   @Autowired
   QuizCurRepository quizcurRepository;
+
+  @Autowired
+  UsuQuizRepository usuquizRepository;
 
   @Autowired
   TagQuizRepository tagquizRepository;
@@ -84,7 +88,7 @@ public class QuizController {
     try {
       Quiz _quiz = quizRepository.save(new Quiz(quiz.getTitulo(), quiz.getDescripcion(), 
       quiz.getActivo(), quiz.getTiempodisponible(), quiz.getRandom(), quiz.getFechacreacion(),
-      quiz.getFechatermino(), quiz.getCursoid()));
+      quiz.getFechatermino(), quiz.getPrivado(), quiz.getCursoid()));
       return new ResponseEntity<>(_quiz, HttpStatus.CREATED);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -104,6 +108,7 @@ public class QuizController {
       _quiz.setRandom(quiz.getRandom());
       _quiz.setFechacreacion(quiz.getFechacreacion());
       _quiz.setFechatermino(quiz.getFechatermino());
+      _quiz.setPrivado(quiz.getPrivado());
       _quiz.setCursoid(quiz.getCursoid());
       return new ResponseEntity<>(quizRepository.save(_quiz ), HttpStatus.OK);
     } else {
@@ -118,6 +123,7 @@ public class QuizController {
       quizcurRepository.deleteByQuizid(id);
       tagquizRepository.deleteByQuizid(id);
       respuestaRepository.deleteByQuizid(id);
+      usuquizRepository.deleteByQuizid(id);
       quizRepository.deleteById(id);
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     } catch (Exception e) {
