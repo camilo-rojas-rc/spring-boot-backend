@@ -36,6 +36,7 @@ import com.bezkoder.spring.jwt.mongodb.repository.QuizPreRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.PreRecurRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.RespuestaRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.RetroalimentacionRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.PerfilRepository;
 
 import java.util.HashSet;
 
@@ -91,6 +92,9 @@ public class UserController {
 
   @Autowired
   RetroalimentacionRepository retroalimentacionRepository;
+
+  @Autowired
+  PerfilRepository perfilRepository;
 
 	@GetMapping("users/all")
 	public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) String username) {
@@ -226,6 +230,7 @@ public class UserController {
         curusuRepository.deleteByUsuarioid(id);
 		respuestaRepository.deleteByUsuarioid(id);
 		usuquizRepository.deleteByUsuarioid(id);
+		perfilRepository.deleteByUsers(id);
         userRepository.deleteById(id);
       } else {
         for(Pregunta pregunta : preguntas) {
@@ -240,6 +245,7 @@ public class UserController {
         curusuRepository.deleteByUsuarioid(id);
 		respuestaRepository.deleteByUsuarioid(id);
 		usuquizRepository.deleteByUsuarioid(id);
+		perfilRepository.deleteByUsers(id);
         userRepository.deleteById(id);
       }
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);

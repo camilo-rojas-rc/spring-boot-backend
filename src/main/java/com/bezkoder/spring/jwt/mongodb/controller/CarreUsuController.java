@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bezkoder.spring.jwt.mongodb.model.CarreUsu;
 import com.bezkoder.spring.jwt.mongodb.repository.CarreUsuRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class CarreUsuController {

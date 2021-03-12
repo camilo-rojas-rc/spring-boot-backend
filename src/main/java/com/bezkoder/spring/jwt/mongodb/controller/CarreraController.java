@@ -24,7 +24,7 @@ import com.bezkoder.spring.jwt.mongodb.repository.CarreraRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.CarreUsuRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.CarreRamoRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class CarreraController {

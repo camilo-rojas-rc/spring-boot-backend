@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.ResponseEntity;
@@ -61,23 +66,52 @@ public class RecursoController {
     }
 
     @PostMapping("/recursos/add")
-    public ResponseEntity<?> addRecurso(@RequestParam("title") String title, @RequestParam("type") String type, @RequestParam(required = false) String link, @RequestParam("privado") boolean privado, @RequestParam("users") String users, @RequestParam("resource") MultipartFile resource) throws IOException {
+    public ResponseEntity<Recurso> addRecurso(@RequestParam("title") String title, @RequestParam("type") String type, @RequestParam(required = false) String link, @RequestParam("privado") boolean privado, @RequestParam("users") String users, @RequestParam("resource") MultipartFile resource) throws IOException {
       try {
         if (link != null) {
           link = link.substring(32);
         }
-        
-        String recurso = recursoService.addRecurso(title, type, link, privado, users, resource);
+        Recurso recurso = new Recurso(title, type, link, privado, users);
+        recurso.setRecurso(new Binary(BsonBinarySubType.BINARY, resource.getBytes()));
+        recurso = recursoRepository.insert(recurso);
         return new ResponseEntity<>(recurso, HttpStatus.CREATED);
       } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
 
-    @GetMapping("/recursos/{id}")
+    @PutMapping("/recursos/{id}")
+    public ResponseEntity<Recurso> updateRecurso(@PathVariable("id") String id, @RequestBody Recurso recurso) {
+      Optional<Recurso> recursoData = recursoRepository.findById(id);
+    
+      if (recursoData.isPresent()) {
+        Recurso _recurso  = recursoData.get();
+        _recurso .setTitle(recurso.getTitle());
+        _recurso .setType(recurso.getType());
+        _recurso .setLink(recurso.getLink());
+        _recurso .setPrivado(recurso.getPrivado());
+        _recurso .setUser(recurso.getUser());
+        return new ResponseEntity<>(recursoRepository.save(_recurso ), HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
+    }
+
+    @GetMapping("/recursos/resource/{id}")
     public ResponseEntity<Resource> getRecurso(@PathVariable String id) {
         Recurso recurso = recursoService.getRecurso(id);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getTitle() + "\"").body(new ByteArrayResource(recurso.getRecurso().getData()));
+    }
+
+    @GetMapping("/recursos/{id}")
+    public ResponseEntity<Recurso> getRecursoById(@PathVariable("id") String id) {
+      Optional<Recurso> recursoData = recursoRepository.findById(id);
+    
+      if (recursoData.isPresent()) {
+        return new ResponseEntity<>(recursoData.get(), HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
     }
 
     @DeleteMapping("/recursos/{id}")

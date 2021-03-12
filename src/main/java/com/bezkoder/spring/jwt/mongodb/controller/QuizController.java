@@ -88,7 +88,7 @@ public class QuizController {
     try {
       Quiz _quiz = quizRepository.save(new Quiz(quiz.getTitulo(), quiz.getDescripcion(), 
       quiz.getActivo(), quiz.getTiempodisponible(), quiz.getRandom(), quiz.getFechacreacion(),
-      quiz.getFechatermino(), quiz.getPrivado(), quiz.getCursoid()));
+      quiz.getFechatermino(), quiz.getPrivado()));
       return new ResponseEntity<>(_quiz, HttpStatus.CREATED);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -109,7 +109,6 @@ public class QuizController {
       _quiz.setFechacreacion(quiz.getFechacreacion());
       _quiz.setFechatermino(quiz.getFechatermino());
       _quiz.setPrivado(quiz.getPrivado());
-      _quiz.setCursoid(quiz.getCursoid());
       return new ResponseEntity<>(quizRepository.save(_quiz ), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

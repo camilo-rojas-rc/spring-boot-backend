@@ -3,6 +3,7 @@ com/bezkoder/spring/jwt/mongodb/model/Role.class
 com/bezkoder/spring/jwt/mongodb/model/Curso.class
 com/bezkoder/spring/jwt/mongodb/security/services/UserDetailsImpl.class
 com/bezkoder/spring/jwt/mongodb/repository/QuizPreRepository.class
+com/bezkoder/spring/jwt/mongodb/repository/PerfilRepository.class
 com/bezkoder/spring/jwt/mongodb/repository/CarreraRepository.class
 com/bezkoder/spring/jwt/mongodb/security/jwt/JwtUtils.class
 com/bezkoder/spring/jwt/mongodb/exception/FileUploadExceptionAdvice.class
@@ -18,6 +19,7 @@ com/bezkoder/spring/jwt/mongodb/controller/CarreUsuController.class
 com/bezkoder/spring/jwt/mongodb/security/jwt/AuthTokenFilter.class
 com/bezkoder/spring/jwt/mongodb/repository/TagQuizRepository.class
 com/bezkoder/spring/jwt/mongodb/repository/PreguntaRepository.class
+com/bezkoder/spring/jwt/mongodb/security/services/PerfilService.class
 com/bezkoder/spring/jwt/mongodb/repository/RamoRepository.class
 com/bezkoder/spring/jwt/mongodb/payload/response/MessageResponse.class
 com/bezkoder/spring/jwt/mongodb/controller/QuizController.class
@@ -43,6 +45,8 @@ com/bezkoder/spring/jwt/mongodb/controller/TagPreController.class
 com/bezkoder/spring/jwt/mongodb/model/UsuQuiz.class
 com/bezkoder/spring/jwt/mongodb/controller/PreguntaController.class
 com/bezkoder/spring/jwt/mongodb/controller/PreRecurController.class
+com/bezkoder/spring/jwt/mongodb/model/Perfil.class
+com/bezkoder/spring/jwt/mongodb/controller/PerfilController.class
 com/bezkoder/spring/jwt/mongodb/security/WebSecurityConfig.class
 com/bezkoder/spring/jwt/mongodb/controller/CarreRamoController.class
 com/bezkoder/spring/jwt/mongodb/model/PreRecur.class

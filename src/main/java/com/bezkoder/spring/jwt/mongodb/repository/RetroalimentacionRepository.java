@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import com.bezkoder.spring.jwt.mongodb.model.Retroalimentacion;
 
 public interface RetroalimentacionRepository extends MongoRepository<Retroalimentacion, String> {
-    List<Retroalimentacion> findByTipoContaining(String tipo);
+    List<Retroalimentacion> findByEnunciadoContaining(String enunciado);
     List<Retroalimentacion> findByPreguntaidContaining(String preguntaid);
     String deleteByPreguntaid(String preguntaid);
 }

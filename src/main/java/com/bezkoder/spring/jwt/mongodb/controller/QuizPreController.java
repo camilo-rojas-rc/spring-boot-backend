@@ -34,7 +34,7 @@ import com.bezkoder.spring.jwt.mongodb.repository.RetroalimentacionRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.PreRecurRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.TagPreRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class QuizPreController {

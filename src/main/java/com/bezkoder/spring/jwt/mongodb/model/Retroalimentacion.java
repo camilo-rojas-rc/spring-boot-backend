@@ -12,8 +12,12 @@ public class Retroalimentacion {
   private String id;
 
   @NotBlank
+  @Size(max = 200)
+  private String enunciado;
+
+  @NotBlank
   @Size(max = 50)
-  private String tipo;
+  private boolean activo = false;
 
   @NotBlank
   @Size(max = 50)
@@ -23,8 +27,9 @@ public class Retroalimentacion {
 
   }
 
-  public Retroalimentacion(String tipo, String preguntaid) {
-    this.tipo = tipo;
+  public Retroalimentacion(String enunciado, boolean activo, String preguntaid) {
+    this.enunciado = enunciado;
+    this.activo = activo;
     this.preguntaid = preguntaid;
   }
 
@@ -36,13 +41,21 @@ public class Retroalimentacion {
     this.id = id;
   }
 
-  public String getTipo() {
-    return tipo;
+  public String getEnunciado() {
+    return enunciado;
   }
 
-  public void setTipo(String tipo) {
-    this.tipo = tipo;
+  public void setEnunciado(String enunciado) {
+    this.enunciado = enunciado;
+  }  
+
+  public boolean getActivo() {
+    return activo;
   }
+
+  public void setActivo(boolean activo) {
+    this.activo = activo;
+  }  
 
   public String getPreguntaid() {
     return preguntaid;
@@ -54,6 +67,6 @@ public class Retroalimentacion {
 
   @Override
     public String toString() {
-        return "Retroalimentacion [id=" + id + ", tipo=" + tipo + ", preguntaid=" + preguntaid + "]";
+        return "Retroalimentacion [id=" + id + ", enunciado=" + enunciado + ", activo=" + activo + ", preguntaid=" + preguntaid + "]";
     }
 }

@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.bezkoder.spring.jwt.mongodb.repository.RecursoRepository;
-import com.bezkoder.spring.jwt.mongodb.model.Recurso;
+import com.bezkoder.spring.jwt.mongodb.repository.PerfilRepository;
+import com.bezkoder.spring.jwt.mongodb.model.Perfil;
 
 @Service
-public class RecursoService {
+public class PerfilService {
 
     @Autowired
-    private RecursoRepository recursoRepo;
+    private PerfilRepository perfilRepo;
 
-    public Recurso getRecurso(String id) {
-        return recursoRepo.findById(id).get();
+    public Perfil getPerfil(String id) {
+        return perfilRepo.findById(id).get();
     }
 }

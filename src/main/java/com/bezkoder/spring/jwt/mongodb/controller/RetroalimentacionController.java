@@ -1,5 +1,7 @@
 package com.bezkoder.spring.jwt.mongodb.controller;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,11 +19,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.core.io.Resource;
 
 import com.bezkoder.spring.jwt.mongodb.model.Retroalimentacion;
 import com.bezkoder.spring.jwt.mongodb.repository.RetroalimentacionRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class RetroalimentacionController {
@@ -30,14 +36,14 @@ public class RetroalimentacionController {
   RetroalimentacionRepository retroalimentacionRepository;
 
   @GetMapping("/retroalimentacions/all")
-  public ResponseEntity<List<Retroalimentacion>> getAllRetroalimentacions(@RequestParam(required = false) String tipo) {
+  public ResponseEntity<List<Retroalimentacion>> getAllRetroalimentacions(@RequestParam(required = false) String enunciado) {
     try {
       List<Retroalimentacion> retroalimentacions = new ArrayList<Retroalimentacion>();
   
-      if (tipo == null)
+      if (enunciado == null)
         retroalimentacionRepository.findAll().forEach(retroalimentacions::add);
       else
-        retroalimentacionRepository.findByTipoContaining(tipo).forEach(retroalimentacions::add);
+        retroalimentacionRepository.findByEnunciadoContaining(enunciado).forEach(retroalimentacions::add);
   
       if (retroalimentacions.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -63,7 +69,7 @@ public class RetroalimentacionController {
   @PostMapping("/retroalimentacions/add")
   public ResponseEntity<Retroalimentacion> createRetroalimentacion(@RequestBody Retroalimentacion Retroalimentacion) {
     try {
-      Retroalimentacion retroalimentacion = new Retroalimentacion(Retroalimentacion.getTipo(), Retroalimentacion.getPreguntaid());
+      Retroalimentacion retroalimentacion = new Retroalimentacion(Retroalimentacion.getEnunciado(), Retroalimentacion.getActivo(), Retroalimentacion.getPreguntaid());
 	    retroalimentacionRepository.save(retroalimentacion);
       return new ResponseEntity<>(retroalimentacion, HttpStatus.CREATED);
     } catch (Exception e) {
@@ -77,7 +83,8 @@ public class RetroalimentacionController {
   
     if (retroalimentacionData.isPresent()) {
       Retroalimentacion _retroalimentacion  = retroalimentacionData.get();
-      _retroalimentacion .setTipo(retroalimentacion.getTipo());
+      _retroalimentacion .setEnunciado(retroalimentacion.getEnunciado());
+      _retroalimentacion .setActivo(retroalimentacion.getActivo());
       _retroalimentacion .setPreguntaid(retroalimentacion.getPreguntaid());
       return new ResponseEntity<>(retroalimentacionRepository.save(_retroalimentacion ), HttpStatus.OK);
     } else {

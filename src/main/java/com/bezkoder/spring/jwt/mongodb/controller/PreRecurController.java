@@ -27,7 +27,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import com.bezkoder.spring.jwt.mongodb.model.PreRecur;
 import com.bezkoder.spring.jwt.mongodb.repository.PreRecurRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class PreRecurController {

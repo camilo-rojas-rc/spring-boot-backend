@@ -13,6 +13,7 @@
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/model/PreRecur.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/TagPreRepository.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/RetroalimentacionController.java
+/home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/security/services/PerfilService.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/model/TagQuiz.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/PreguntaController.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/CarreraController.java
@@ -49,6 +50,7 @@
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/AuthController.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/CursoController.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/RoleRepository.java
+/home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/PerfilRepository.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/PreRecurController.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/CarreUsuRepository.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/QuizCurController.java
@@ -59,9 +61,11 @@
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/PreRecurRepository.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/CarreUsuController.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/payload/response/MessageResponse.java
+/home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/model/Perfil.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/RamoRepository.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/model/Pregunta.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/model/CarreRamo.java
+/home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/controller/PerfilController.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/TagRepository.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/security/jwt/AuthTokenFilter.java
 /home/camilo/Universidad/spring-back/src/main/java/com/bezkoder/spring/jwt/mongodb/repository/UsuQuizRepository.java

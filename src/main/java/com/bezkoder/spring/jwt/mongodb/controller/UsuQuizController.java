@@ -19,15 +19,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bezkoder.spring.jwt.mongodb.model.UsuQuiz;
+import com.bezkoder.spring.jwt.mongodb.model.User;
 import com.bezkoder.spring.jwt.mongodb.repository.UsuQuizRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.UserRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class UsuQuizController {
 
   @Autowired
   UsuQuizRepository usuquizRepository;
+
+  @Autowired
+  UserRepository userRepository;
 
   @GetMapping("/usuquizs/all")
   public ResponseEntity<List<UsuQuiz>> getAllUsuQuizs() {
@@ -41,6 +46,35 @@ public class UsuQuizController {
       }
   
       return new ResponseEntity<>(usuquiz, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @GetMapping("/usuquizs/usuquizs-chart/{id}")
+  public ResponseEntity<?> countById(@PathVariable("id") String id) {
+    try {
+      ArrayList<String> datos = new ArrayList<String>();
+
+      List<UsuQuiz> respuestas = new ArrayList<>();
+      usuquizRepository.findByQuizidContaining(id).forEach(respuestas::add);
+
+      if (respuestas.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      } else {
+        for (UsuQuiz respuesta : respuestas) {
+          Optional<User> usuquizData = userRepository.findById(respuesta.getUsuarioid());
+          if (usuquizData.isPresent()) {
+            User _usuario  = usuquizData.get();
+            datos.add(_usuario.getUsername());
+          } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+          }
+          datos.add(respuesta.getPuntajetotal());
+        }
+      }
+  
+      return new ResponseEntity<>(datos, HttpStatus.CREATED);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
