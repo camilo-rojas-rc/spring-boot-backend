@@ -21,6 +21,14 @@ public class Recurso {
     @Size(max = 50)
     private String type;
 
+    @NotBlank
+    @Size(max = 50)
+    private String inicialmin = null;
+
+    @NotBlank
+    @Size(max = 50)
+    private String finalmin = null;
+
     private String link = null;
 
     @NotBlank
@@ -33,10 +41,12 @@ public class Recurso {
 
     private Binary resource;
 
-    public Recurso(String title, String type, String link, boolean privado, String users) {
+    public Recurso(String title, String type, String inicialmin, String finalmin, String link, boolean privado, String users) {
         super();
         this.title = title;
         this.type = type;
+        this.inicialmin = inicialmin;
+        this.finalmin = finalmin;
         this.link = link;
         this.privado = privado;
         this.users = users;
@@ -64,6 +74,22 @@ public class Recurso {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getInicialmin() {
+        return inicialmin;
+    }
+
+    public void setInicialmin(String inicialmin) {
+        this.inicialmin = inicialmin;
+    }
+
+    public String getFinalmin() {
+        return finalmin;
+    }
+
+    public void setFinalmin(String finalmin) {
+        this.finalmin = finalmin;
     }
 
     public String getLink() {
@@ -100,6 +126,6 @@ public class Recurso {
     
     @Override
     public String toString() {
-        return "Recurso [id=" + id + ", title=" + title + ", type=" + type + ", link=" + link + ", privado=" + privado + ", users=" + users + ", resource=" + resource + "]";
+        return "Recurso [id=" + id + ", title=" + title + ", type=" + type + ", inicialmin=" + inicialmin + ", finalmin=" + finalmin + ", link=" + link + ", privado=" + privado + ", users=" + users + ", resource=" + resource + "]";
     }
 }

@@ -23,6 +23,26 @@ public class Pregunta {
   @Size(max = 200)
   private String enunciado;
 
+  @NotBlank
+  @Size(max = 200)
+  private String subenunciado1;
+
+  @NotBlank
+  @Size(max = 200)
+  private String subenunciado2;
+
+  @NotBlank
+  @Size(max = 200)
+  private String subenunciado3;
+
+  @NotBlank
+  @Size(max = 200)
+  private String subenunciado4;
+
+  @NotBlank
+  @Size(max = 50)
+  private String template;
+
   @Size(max = 200)
   private String opcion1 = null;
 
@@ -35,9 +55,6 @@ public class Pregunta {
   @Size(max = 200)
   private String opcion4 = null;
 
-  @Size(max = 200)
-  private String opcion5 = null;
-
   @Size(max = 20)
   private String respuesta1 = null;
 
@@ -49,9 +66,6 @@ public class Pregunta {
 
   @Size(max = 20)
   private String respuesta4 = null;
-
-  @Size(max = 20)
-  private String respuesta5 = null;
 
   @NotBlank
   @Size(max = 50)
@@ -77,20 +91,23 @@ public class Pregunta {
 
   }
 
-  public Pregunta(String titulo, String tipo, String enunciado, String opcion1, String opcion2, String opcion3, String opcion4, String opcion5, String respuesta1, String respuesta2, String respuesta3, String respuesta4, String respuesta5, String tiemporespuesta, String puntaje, boolean random, boolean privado, String users) {
+  public Pregunta(String titulo, String tipo, String enunciado, String subenunciado1, String subenunciado2, String subenunciado3, String subenunciado4, String template, String opcion1, String opcion2, String opcion3, String opcion4, String respuesta1, String respuesta2, String respuesta3, String respuesta4, String tiemporespuesta, String puntaje, boolean random, boolean privado, String users) {
     this.titulo = titulo;
     this.tipo = tipo;
     this.enunciado = enunciado;
+    this.subenunciado1 = subenunciado1;
+    this.subenunciado2 = subenunciado2;
+    this.subenunciado3 = subenunciado3;
+    this.subenunciado4 = subenunciado4;
+    this.template = template;
     this.opcion1 = opcion1;
     this.opcion2 = opcion2;
     this.opcion3 = opcion3;
     this.opcion4 = opcion4;
-    this.opcion5 = opcion5;
     this.respuesta1 = respuesta1;
     this.respuesta2 = respuesta2;
     this.respuesta3 = respuesta3;
     this.respuesta4 = respuesta4;
-    this.respuesta5 = respuesta5;
     this.tiemporespuesta = tiemporespuesta;
     this.puntaje = puntaje;
     this.random = random;
@@ -130,6 +147,46 @@ public class Pregunta {
     this.enunciado = enunciado;
   }
 
+  public String getSubenunciado1() {
+    return subenunciado1;
+  }
+
+  public void setSubenunciado1(String subenunciado1) {
+    this.subenunciado1 = subenunciado1;
+  }
+
+  public String getSubenunciado2() {
+    return subenunciado2;
+  }
+
+  public void setSubenunciado2(String subenunciado2) {
+    this.subenunciado2 = subenunciado2;
+  }
+
+  public String getSubenunciado3() {
+    return subenunciado3;
+  }
+
+  public void setSubenunciado3(String subenunciado3) {
+    this.subenunciado3 = subenunciado3;
+  }
+
+  public String getSubenunciado4() {
+    return subenunciado4;
+  }
+
+  public void setSubenunciado4(String subenunciado4) {
+    this.subenunciado4 = subenunciado4;
+  }
+
+  public String getTemplate() {
+    return template;
+  }
+
+  public void setTemplate(String template) {
+    this.template = template;
+  }
+
   public String getOpcion1() {
     return opcion1;
   }
@@ -162,14 +219,6 @@ public class Pregunta {
     this.opcion4 = opcion4;
   }
 
-  public String getOpcion5() {
-    return opcion5;
-  }
-
-  public void setOpcion5(String opcion5) {
-    this.opcion5 = opcion5;
-  }
-
   public String getRespuesta1() {
     return respuesta1;
   }
@@ -200,14 +249,6 @@ public class Pregunta {
 
   public void setRespuesta4(String respuesta4) {
     this.respuesta4 = respuesta4;
-  }
-
-  public String getRespuesta5() {
-    return respuesta5;
-  }
-
-  public void setRespuesta5(String respuesta5) {
-    this.respuesta5 = respuesta5;
   }
 
   public String getTiempoRespuesta() {
@@ -252,10 +293,11 @@ public class Pregunta {
 
   @Override
     public String toString() {
-        return "Pregunta [id=" + id + ", titulo=" + titulo + ", tipo=" + tipo + ", enunciado=" + enunciado + 
-        ", opcion1=" + opcion1 + ", opcion2=" + opcion2 + ", opcion3=" + opcion3 + ", opcion4=" + opcion4 + 
-        ", opcion5=" + opcion5 + ", respuesta1=" + respuesta1 + ", respuesta2=" + respuesta2 + 
-        ", respuesta3=" + respuesta3 + ", respuesta4=" + respuesta4 + ", respuesta5=" + respuesta5 + 
-        ", tiemporespuesta=" + tiemporespuesta + ", puntaje=" + puntaje + ", random=" + random + ", privado=" + privado + ", users=" + users + "]";
+        return "Pregunta [id=" + id + ", titulo=" + titulo + ", tipo=" + tipo + ", enunciado=" + enunciado +
+        ", subenunciado1=" + subenunciado1 + ", subenunciado2=" + subenunciado2 + ", subenunciado3=" + subenunciado3 + ", subenunciado4=" + subenunciado4 + 
+        ", template=" + template + ", opcion1=" + opcion1 + ", opcion2=" + opcion2 + ", opcion3=" + opcion3 + ", opcion4=" + opcion4 + 
+        ", respuesta1=" + respuesta1 + ", respuesta2=" + respuesta2 + ", respuesta3=" + respuesta3 + 
+        ", respuesta4=" + respuesta4 + ", tiemporespuesta=" + tiemporespuesta + ", puntaje=" + puntaje + 
+        ", random=" + random + ", privado=" + privado + ", users=" + users + "]";
     }
 }

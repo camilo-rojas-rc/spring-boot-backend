@@ -66,12 +66,12 @@ public class RecursoController {
     }
 
     @PostMapping("/recursos/add")
-    public ResponseEntity<Recurso> addRecurso(@RequestParam("title") String title, @RequestParam("type") String type, @RequestParam(required = false) String link, @RequestParam("privado") boolean privado, @RequestParam("users") String users, @RequestParam("resource") MultipartFile resource) throws IOException {
+    public ResponseEntity<Recurso> addRecurso(@RequestParam("title") String title, @RequestParam("type") String type, @RequestParam(required = false)  String inicialmin, @RequestParam(required = false) String finalmin, @RequestParam(required = false) String link, @RequestParam("privado") boolean privado, @RequestParam("users") String users, @RequestParam(required = false) MultipartFile resource) throws IOException {
       try {
         if (link != null) {
           link = link.substring(32);
         }
-        Recurso recurso = new Recurso(title, type, link, privado, users);
+        Recurso recurso = new Recurso(title, type, inicialmin, finalmin, link, privado, users);
         recurso.setRecurso(new Binary(BsonBinarySubType.BINARY, resource.getBytes()));
         recurso = recursoRepository.insert(recurso);
         return new ResponseEntity<>(recurso, HttpStatus.CREATED);
@@ -88,6 +88,8 @@ public class RecursoController {
         Recurso _recurso  = recursoData.get();
         _recurso .setTitle(recurso.getTitle());
         _recurso .setType(recurso.getType());
+        _recurso .setInicialmin(recurso.getInicialmin());
+        _recurso .setFinalmin(recurso.getFinalmin());
         _recurso .setLink(recurso.getLink());
         _recurso .setPrivado(recurso.getPrivado());
         _recurso .setUser(recurso.getUser());

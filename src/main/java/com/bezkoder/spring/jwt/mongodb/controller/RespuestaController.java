@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bezkoder.spring.jwt.mongodb.model.Respuesta;
+import com.bezkoder.spring.jwt.mongodb.model.Pregunta;
 import com.bezkoder.spring.jwt.mongodb.repository.RespuestaRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.PreguntaRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -31,6 +33,9 @@ public class RespuestaController {
 
   @Autowired
   RespuestaRepository respuestaRepository;
+
+  @Autowired
+  PreguntaRepository preguntaRepository;
 
   @GetMapping("/respuestas/all")
   public ResponseEntity<List<Respuesta>> getAllRespuestas() {
@@ -60,6 +65,95 @@ public class RespuestaController {
     }
   }
 
+  @GetMapping("/respuestas/respuestas-chart")
+  public ResponseEntity<?> countById(@RequestParam(required = false) String id) {
+    try {
+      String id1 = id.substring(0, 24);
+      String id2 = id.substring(24, id.length());
+
+      ArrayList<String> datos = new ArrayList<String>();
+      List<Respuesta> preguntas = new ArrayList<>();
+
+      Optional<Pregunta> preguntaData = preguntaRepository.findById(id2);
+
+        if (preguntaData.isPresent()) {
+          Pregunta _pregunta  = preguntaData.get();
+          
+          String nombre1 = _pregunta.getOpcion1();
+          String nombre2 = _pregunta.getOpcion2();
+          String nombre3 = _pregunta.getOpcion3();
+          String nombre4 = _pregunta.getOpcion4();
+          
+          List<Respuesta> respuestas = new ArrayList<>();
+          respuestaRepository.findByQuizidContaining(id1).forEach(respuestas::add);
+
+          if (respuestas.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+          } else {
+            int cont1 = 0;
+            int cont2 = 0;
+            int cont3 = 0; 
+            int cont4 = 0;
+
+            for (Respuesta respuesta : respuestas) {
+              String preguntaid = respuesta.getPreguntaid();
+              boolean comparacion = preguntaid.equals(id2);
+
+              String respuesta1 = respuesta.getRespuesta1();
+              boolean comparacion1 = respuesta1.equals("1");
+
+              String respuesta2 = respuesta.getRespuesta2();
+              boolean comparacion2 = respuesta2.equals("1");
+
+              String respuesta3 = respuesta.getRespuesta3();
+              boolean comparacion3 = respuesta3.equals("1");
+
+              String respuesta4 = respuesta.getRespuesta4();
+              boolean comparacion4 = respuesta4.equals("1");
+
+							if (comparacion == true){
+
+								if (comparacion1 == true){
+                  cont1++;
+                }
+                if (comparacion2 == true){
+                  cont2++;
+                }
+                if (comparacion3 == true){
+                  cont3++;
+                }
+                if (comparacion4 == true){
+                  cont4++;
+                }
+							}
+            }
+            
+            String cantidad1 = String.valueOf(cont1);
+            datos.add(nombre1);
+            datos.add(cantidad1);
+            
+            String cantidad2 = String.valueOf(cont2);
+            datos.add(nombre2);
+            datos.add(cantidad2);
+
+            String cantidad3 = String.valueOf(cont3);
+            datos.add(nombre3);
+            datos.add(cantidad3);
+
+            String cantidad4 = String.valueOf(cont4);
+            datos.add(nombre4);
+            datos.add(cantidad4);
+          }
+        } else {
+          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+  
+      return new ResponseEntity<>(datos, HttpStatus.CREATED);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   @PostMapping("/respuestas/add")
   public ResponseEntity<Respuesta> createRespuesta(@RequestBody Respuesta Respuesta) {
     try {
@@ -67,8 +161,8 @@ public class RespuestaController {
       List<Respuesta> datos = new ArrayList<>();
       Respuesta _respuesta = new Respuesta(Respuesta.getTiemporespuesta(),
       Respuesta.getRespuesta1(), Respuesta.getRespuesta2(), Respuesta.getRespuesta3(),
-      Respuesta.getRespuesta4(), Respuesta.getRespuesta5(), Respuesta.getPuntaje(),
-      Respuesta.getUsuarioid(), Respuesta.getPreguntaid(), Respuesta.getQuizid());
+      Respuesta.getRespuesta4(), Respuesta.getPuntaje(), Respuesta.getUsuarioid(), 
+      Respuesta.getPreguntaid(), Respuesta.getQuizid());
   
       String preguntaid = _respuesta.getPreguntaid();
       String quizid = _respuesta.getQuizid();
@@ -118,7 +212,6 @@ public class RespuestaController {
       _respuesta.setRespuesta2(respuesta.getRespuesta2());
       _respuesta.setRespuesta3(respuesta.getRespuesta3());
       _respuesta.setRespuesta4(respuesta.getRespuesta4());
-      _respuesta.setRespuesta5(respuesta.getRespuesta5());
       _respuesta.setPuntaje(respuesta.getPuntaje());
       _respuesta.setUsuarioid(respuesta.getUsuarioid());
       _respuesta.setPreguntaid(respuesta.getPreguntaid());

@@ -144,11 +144,10 @@ public class PreguntaController {
   public ResponseEntity<Pregunta> createPregunta(@RequestBody Pregunta pregunta) {
     try {
       Pregunta _pregunta = preguntaRepository.save(new Pregunta(pregunta.getTitulo(), 
-      pregunta.getTipo(), pregunta.getEnunciado(), pregunta.getOpcion1(), 
-      pregunta.getOpcion2(), pregunta.getOpcion3(), pregunta.getOpcion4(), 
-      pregunta.getOpcion5(), pregunta.getRespuesta1(), pregunta.getRespuesta2(),
-      pregunta.getRespuesta3(), pregunta.getRespuesta4(), pregunta.getRespuesta5(), pregunta.getTiempoRespuesta(),
-      pregunta.getPuntaje(), pregunta.getRandom(), pregunta.getPrivado(), pregunta.getUser()));
+      pregunta.getTipo(), pregunta.getEnunciado(), pregunta.getSubenunciado1(), pregunta.getSubenunciado2(), pregunta.getSubenunciado3(), 
+      pregunta.getSubenunciado4(), pregunta.getTemplate(), pregunta.getOpcion1(), pregunta.getOpcion2(), pregunta.getOpcion3(), 
+      pregunta.getOpcion4(), pregunta.getRespuesta1(), pregunta.getRespuesta2(), pregunta.getRespuesta3(), pregunta.getRespuesta4(), 
+      pregunta.getTiempoRespuesta(), pregunta.getPuntaje(), pregunta.getRandom(), pregunta.getPrivado(), pregunta.getUser()));
       return new ResponseEntity<>(_pregunta, HttpStatus.CREATED);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -164,16 +163,19 @@ public class PreguntaController {
       _pregunta.setTitulo(pregunta.getTitulo());
       _pregunta.setTipo(pregunta.getTipo());
       _pregunta.setEnunciado(pregunta.getEnunciado());
+      _pregunta.setSubenunciado1(pregunta.getSubenunciado1());
+      _pregunta.setSubenunciado2(pregunta.getSubenunciado2());
+      _pregunta.setSubenunciado3(pregunta.getSubenunciado3());
+      _pregunta.setSubenunciado4(pregunta.getSubenunciado4());
+      _pregunta.setTemplate(pregunta.getTemplate());
       _pregunta.setOpcion1(pregunta.getOpcion1());
       _pregunta.setOpcion2(pregunta.getOpcion2());
       _pregunta.setOpcion3(pregunta.getOpcion3());
       _pregunta.setOpcion4(pregunta.getOpcion4());
-      _pregunta.setOpcion5(pregunta.getOpcion5());
       _pregunta.setRespuesta1(pregunta.getRespuesta1());
       _pregunta.setRespuesta2(pregunta.getRespuesta2());
       _pregunta.setRespuesta3(pregunta.getRespuesta3());
       _pregunta.setRespuesta4(pregunta.getRespuesta4());
-      _pregunta.setRespuesta5(pregunta.getRespuesta5());
       _pregunta.setTiempoRespuesta(pregunta.getTiempoRespuesta());
       _pregunta.setPuntaje(pregunta.getPuntaje());
       _pregunta.setRandom(pregunta.getRandom());
