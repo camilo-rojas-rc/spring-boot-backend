@@ -27,12 +27,14 @@ import com.bezkoder.spring.jwt.mongodb.model.Respuesta;
 import com.bezkoder.spring.jwt.mongodb.model.Retroalimentacion;
 import com.bezkoder.spring.jwt.mongodb.model.PreRecur;
 import com.bezkoder.spring.jwt.mongodb.model.QuizPre;
+import com.bezkoder.spring.jwt.mongodb.model.User;
 import com.bezkoder.spring.jwt.mongodb.repository.PreguntaRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.TagPreRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.QuizPreRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.PreRecurRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.RespuestaRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.RetroalimentacionRepository;
+import com.bezkoder.spring.jwt.mongodb.repository.UserRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -56,6 +58,9 @@ public class PreguntaController {
 
   @Autowired
   RetroalimentacionRepository retroalimentacionRepository;
+
+  @Autowired
+  UserRepository userRepository;
 
   @GetMapping("/preguntas/all")
   public ResponseEntity<List<Pregunta>> getAllPreguntas(@RequestParam(required = false) String titulo) {
@@ -122,6 +127,41 @@ public class PreguntaController {
       String canttag = String.valueOf(tamanio5);
       datos.add("Tag");
       datos.add(canttag);
+  
+      return new ResponseEntity<>(datos, HttpStatus.CREATED);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @GetMapping("/preguntas/preguntas-users")
+  public ResponseEntity<?> countBy() {
+    try {
+      ArrayList<String> datos = new ArrayList<String>();
+
+      List<User> users = new ArrayList<>();
+      userRepository.findAll().forEach(users::add);
+
+      if (users.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      } else {
+        for (User user : users) {
+					List<Pregunta> preguntas = new ArrayList<>();
+					preguntaRepository.findByUsersContaining(user.getId()).forEach(preguntas::add);
+
+          int total = preguntas.size();
+          String tamaño = String.valueOf(total);
+
+          String zero = "0";
+					boolean comparacion = tamaño.equals(zero);
+
+          if (comparacion == false){
+            String nombre = user.getUsername();
+            datos.add(nombre);
+            datos.add(tamaño);
+          }
+				}
+      }
   
       return new ResponseEntity<>(datos, HttpStatus.CREATED);
     } catch (Exception e) {

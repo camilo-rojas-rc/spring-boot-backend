@@ -68,13 +68,21 @@ public class RecursoController {
     @PostMapping("/recursos/add")
     public ResponseEntity<Recurso> addRecurso(@RequestParam("title") String title, @RequestParam("type") String type, @RequestParam(required = false)  String inicialmin, @RequestParam(required = false) String finalmin, @RequestParam(required = false) String link, @RequestParam("privado") boolean privado, @RequestParam("users") String users, @RequestParam(required = false) MultipartFile resource) throws IOException {
       try {
+        Recurso _recurso;
+        
         if (link != null) {
           link = link.substring(32);
+
+          _recurso = new Recurso(title, type, inicialmin, finalmin, link, privado, users);
+
+          recursoRepository.save(_recurso);
+        } else {
+          _recurso = new Recurso(title, type, inicialmin, finalmin, link, privado, users);
+          _recurso.setRecurso(new Binary(BsonBinarySubType.BINARY, resource.getBytes()));
+
+          recursoRepository.save(_recurso);
         }
-        Recurso recurso = new Recurso(title, type, inicialmin, finalmin, link, privado, users);
-        recurso.setRecurso(new Binary(BsonBinarySubType.BINARY, resource.getBytes()));
-        recurso = recursoRepository.insert(recurso);
-        return new ResponseEntity<>(recurso, HttpStatus.CREATED);
+        return new ResponseEntity<>(_recurso, HttpStatus.CREATED);
       } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
       }
