@@ -71,7 +71,7 @@ public class RecursoController {
         Recurso _recurso;
         
         if (link != null) {
-          link = link.substring(32);
+          link = link.substring(17);
 
           _recurso = new Recurso(title, type, inicialmin, finalmin, link, privado, users);
 
