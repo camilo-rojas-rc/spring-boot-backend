@@ -29,7 +29,7 @@ public class Quiz {
 
   @NotBlank
   @Size(max = 50)
-  private boolean random = false;
+  private String usuarioid;
 
   @NotBlank
   @Size(max = 50)
@@ -47,12 +47,12 @@ public class Quiz {
     
   }
 
-  public Quiz(String titulo, String descripcion, boolean activo, String tiempodisponible, boolean random, String fechacreacion, String fechatermino, boolean privado) {
+  public Quiz(String titulo, String descripcion, boolean activo, String tiempodisponible, String usuarioid, String fechacreacion, String fechatermino, boolean privado) {
     this.titulo = titulo;
     this.descripcion = descripcion;
     this.activo = activo;
     this.tiempodisponible = tiempodisponible;
-    this.random = random;
+    this.usuarioid = usuarioid;
     this.fechacreacion = fechacreacion;
     this.fechatermino = fechatermino;
     this.privado = privado;
@@ -98,12 +98,12 @@ public class Quiz {
     this.tiempodisponible = tiempodisponible;
   } 
 
-  public boolean getRandom() {
-    return random;
+  public String getUsuarioid() {
+    return usuarioid;
   }
 
-  public void setRandom(boolean random) {
-    this.random = random;
+  public void setUsuarioid(String usuarioid) {
+    this.usuarioid = usuarioid;
   }
 
   public String getFechacreacion() {
@@ -134,7 +134,7 @@ public class Quiz {
     public String toString() {
         return "Quiz [id=" + id + ", titulo=" + titulo + ", descripcion=" + descripcion + 
         ", activo=" + activo + ", tiempodisponible=" + tiempodisponible + 
-        ", random=" + random + ", fechacreacion=" + fechacreacion + 
+        ", usuarioid=" + usuarioid + ", fechacreacion=" + fechacreacion + 
         ", fechatermino=" + fechatermino + ", privado=" + privado + "]";
     }
 }

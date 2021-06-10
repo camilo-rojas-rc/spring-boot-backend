@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
 import com.bezkoder.spring.jwt.mongodb.model.Recurso;
+import com.bezkoder.spring.jwt.mongodb.model.PreRecur;
 import com.bezkoder.spring.jwt.mongodb.security.services.RecursoService;
 import com.bezkoder.spring.jwt.mongodb.repository.RecursoRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.PreRecurRepository;
@@ -83,6 +84,68 @@ public class RecursoController {
           recursoRepository.save(_recurso);
         }
         return new ResponseEntity<>(_recurso, HttpStatus.CREATED);
+      } catch (Exception e) {
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
+
+    @GetMapping("/recursos/create")
+    public ResponseEntity<?> createRecurso(@RequestParam(required = false) String id) {
+      try {
+        String idrecurso = id.substring(0, 24);
+        String idpregunta = id.substring(24, id.length());
+
+        Optional<Recurso> recursoData = recursoRepository.findById(idrecurso);
+        
+        if (recursoData.isPresent()) {
+          Recurso _recurso  = recursoData.get();
+
+          Recurso recurso  = new Recurso(_recurso.getTitle(), _recurso.getType(), _recurso.getInicialmin(),
+          _recurso.getFinalmin(), _recurso.getLink(), _recurso.getPrivado(), _recurso.getUser());
+
+          recurso.setRecurso(_recurso.getRecurso());
+
+          recursoRepository.save(recurso);
+
+          int cont = 0;
+          List<PreRecur> datos = new ArrayList<>();
+
+          String recursosid = recurso.getId();
+
+          PreRecur prerecur = new PreRecur(idpregunta, recursosid);
+
+          String preguntaid = prerecur.getPreguntaid();
+          String recursoid = prerecur.getRecursoid();
+          prerecurRepository.findAll().forEach(datos::add);
+
+          if (datos.isEmpty()) {
+            prerecurRepository.save(prerecur);
+          } else {
+            for (PreRecur dato : datos) {
+              String preguntaid2 = dato.getPreguntaid();
+              String recursoid2 = dato.getRecursoid();
+              boolean comparacion1 = preguntaid2.equals(preguntaid);
+              boolean comparacion2 = recursoid2.equals(recursoid);
+              if (comparacion1 == true){
+                if (comparacion2 == true){
+                  cont = 1;
+                }
+              }
+            }
+          }
+
+          if (cont == 0){
+            prerecurRepository.save(prerecur);
+            return new ResponseEntity<>(prerecur, HttpStatus.CREATED);
+
+          } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+          }
+
+        } else {
+          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
       } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
       }

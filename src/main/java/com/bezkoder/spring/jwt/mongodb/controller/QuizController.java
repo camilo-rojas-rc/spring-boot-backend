@@ -87,7 +87,7 @@ public class QuizController {
   public ResponseEntity<Quiz> createQuiz(@RequestBody Quiz quiz) {
     try {
       Quiz _quiz = quizRepository.save(new Quiz(quiz.getTitulo(), quiz.getDescripcion(), 
-      quiz.getActivo(), quiz.getTiempodisponible(), quiz.getRandom(), quiz.getFechacreacion(),
+      quiz.getActivo(), quiz.getTiempodisponible(), quiz.getUsuarioid(), quiz.getFechacreacion(),
       quiz.getFechatermino(), quiz.getPrivado()));
       return new ResponseEntity<>(_quiz, HttpStatus.CREATED);
     } catch (Exception e) {
@@ -105,7 +105,7 @@ public class QuizController {
       _quiz.setDescripcion(quiz.getDescripcion());
       _quiz.setActivo(quiz.getActivo());
       _quiz.setTiempodisponible(quiz.getTiempodisponible());
-      _quiz.setRandom(quiz.getRandom());
+      _quiz.setUsuarioid(quiz.getUsuarioid());
       _quiz.setFechacreacion(quiz.getFechacreacion());
       _quiz.setFechatermino(quiz.getFechatermino());
       _quiz.setPrivado(quiz.getPrivado());
