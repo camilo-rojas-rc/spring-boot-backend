@@ -93,7 +93,8 @@ public class RecursoController {
     public ResponseEntity<?> createRecurso(@RequestParam(required = false) String id) {
       try {
         String idrecurso = id.substring(0, 24);
-        String idpregunta = id.substring(24, id.length());
+        String idpregunta = id.substring(24, 48);
+        String iduser = id.substring(48, id.length());
 
         Optional<Recurso> recursoData = recursoRepository.findById(idrecurso);
         
@@ -101,7 +102,7 @@ public class RecursoController {
           Recurso _recurso  = recursoData.get();
 
           Recurso recurso  = new Recurso(_recurso.getTitle(), _recurso.getType(), _recurso.getInicialmin(),
-          _recurso.getFinalmin(), _recurso.getLink(), _recurso.getPrivado(), _recurso.getUser());
+          _recurso.getFinalmin(), _recurso.getLink(), _recurso.getPrivado(), iduser);
 
           recurso.setRecurso(_recurso.getRecurso());
 
