@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -217,6 +218,20 @@ public class UserController {
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
+
+  @PutMapping("/users/{id}")
+    public ResponseEntity<User> updateUsers(@PathVariable("id") String id, @RequestBody User user) {
+      Optional<User> userData = userRepository.findById(id);
+    
+      if (userData.isPresent()) {
+        User _user  = userData.get();
+        _user .setUsername(user.getUsername());
+        _user .setEmail(user.getEmail());
+        return new ResponseEntity<>(userRepository.save(_user ), HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
+    }
   
   @DeleteMapping("users/{id}")
   public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
